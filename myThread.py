@@ -4,12 +4,24 @@ import subprocess
 
 exitFlag = 0
 
-def convert_video(videoName):
+def videoConvert(videoName):
     print("converting " + videoName )
     subprocess.run("bash convert.sh " + videoName)
     subprocess.run("rm ../recordings/" + videoName)
-def stream_video(videoName, cap, vid):
 
+def videoStream(videoName, cap, vid):
+    output = cv2.VideoWriter("/home/pi/recordings/"+ videoName, vid, 25, (1280,720))
+    start=t.time()
+    while (cap.isOpened()):
+      try:
+        ret, frame= cap.read()
+        output.write(frame)
+        now= t.time()
+        if(now > start + 60*10):
+            break
+      except:
+        cap.release()
+        cap = cv2.VideoCapture("rtsp://192.168.1.88:554/11")
 
 
 class convThread (threading.Thread):
