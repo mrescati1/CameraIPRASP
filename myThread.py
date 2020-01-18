@@ -1,13 +1,15 @@
 import threading
-import time
+import time as t
 import subprocess
+import cv2
+import os
 
 exitFlag = 0
 
 def videoConvert(videoName):
     print("converting " + videoName )
-    subprocess.run("bash convert.sh " + videoName)
-    subprocess.run("rm ../recordings/" + videoName)
+    os.system("bash converter.sh " + videoName)
+    os.system("rm ../recordings/" + videoName)
 
 def videoStream(videoName, cap, vid):
     output = cv2.VideoWriter("/home/pi/recordings/"+ videoName, vid, 25, (1280,720))
@@ -17,7 +19,7 @@ def videoStream(videoName, cap, vid):
         ret, frame= cap.read()
         output.write(frame)
         now= t.time()
-        if(now > start + 60*10):
+        if(now > start + 60*1):
             break
       except:
         cap.release()
@@ -29,7 +31,7 @@ class convThread (threading.Thread):
       threading.Thread.__init__(self)
       self.threadID = threadID
       self.videoName = videoName
-   def run(self):
-      print "Starting " + self.threadID
-      convert_video(self.videoName)
-      print "Exiting " + self.threadID
+   def start(self):
+      print "Starting " + str(self.threadID)
+      videoConvert(self.videoName)
+      print "Exiting " + str(self.threadID)

@@ -18,8 +18,10 @@ while(True):
     videoNameOld=videoName
     videoName=setVideoName()
     converter=convThread( 1 , videoNameOld)
+    cap.release()
+    cap = cv2.VideoCapture("rtsp://192.168.1.88:554/11")
     videoStream(videoName, cap, vid)
     converter.start()
-
+     
 
 
