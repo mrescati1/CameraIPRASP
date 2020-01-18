@@ -1,8 +1,9 @@
 import cv2
 import time as t
 import datetime as date
-from myThread.py import convThread
-
+from myThread import videoStream
+from myThread import convThread
+from myThread import myThread
 def setVideoName():
     dt=date.datetime.now()
     h=dt.strftime('%Y-%m-%d-%H-%M')
@@ -10,23 +11,23 @@ def setVideoName():
     return videoName
 
 
-cap = cv2.VideoCapture("rtsp://192.168.1.21:554/11")
+
+cap = cv2.VideoCapture("rtsp://192.168.1.88:554/11")
 vid = cv2.VideoWriter_fourcc('M', 'J', 'P', 'G')
+videoName=setVideoName()
+videoStream(videoName, cap, vid)
 iD=0
 while(True):
+    videoNameOld=videoName
     videoName=setVideoName()
-    output = cv2.VideoWriter("/home/pi/recordings/"+ videoName, vid, 25, (1280,720))
-    start=t.time()
-    while (cap.isOpened()):
-        ret, frame= cap.read()
-        output.write(frame)
-        now= t.time()
-        if(now > start + 60*10):
-            break
-    converter=convThread( iD , videoName)
+    converter=convThread( 1 , videoNameOld)
+    cap.release()
+    cap = cv2.VideoCapture("rtsp://192.168.1.88:554/11")
+    videoStream(videoName, cap, vid) 
+    #stream.start()
     converter.start()
-    iD+=0
+    #stream.join()
+    iD+=1
 
-cap.release()
 
 
