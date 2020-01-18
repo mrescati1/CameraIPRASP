@@ -1,7 +1,7 @@
 import cv2
 import time as t
 import datetime as date
-import convThread from myThread.py
+from myThread.py import convThread
 
 def setVideoName():
     dt=date.datetime.now()
