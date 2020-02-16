@@ -4,7 +4,6 @@ import subprocess
 import cv2
 import os
 
-exitFlag = 0
 
 def videoConvert(videoName):
     print("converting " + videoName )
@@ -19,7 +18,7 @@ def videoStream(videoName, cap, vid):
         ret, frame= cap.read()
         output.write(frame)
         now= t.time()
-        if(now > start + 60*1):
+        if(now > start + 60*10):
             break
       except:
         cap.release()
@@ -31,7 +30,7 @@ class convThread (threading.Thread):
       threading.Thread.__init__(self)
       self.threadID = threadID
       self.videoName = videoName
-   def start(self):
+   def run(self):
       print "Starting " + str(self.threadID)
       videoConvert(self.videoName)
       print "Exiting " + str(self.threadID)
